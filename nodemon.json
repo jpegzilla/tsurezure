@@ -1,0 +1,5 @@
+{
+  "ignore": [".git"],
+  "watch": ["./"],
+  "ext": "rb, Gemfile"
+}

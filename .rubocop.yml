@@ -1,0 +1,3 @@
+GlobalVars:
+  AllowedVariables:
+    - $PROCESS_MODE
