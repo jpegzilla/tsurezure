@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - '**/*.gemspec'
+
 GlobalVars:
   AllowedVariables:
     - $PROCESS_MODE
