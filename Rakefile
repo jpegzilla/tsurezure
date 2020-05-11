@@ -30,3 +30,11 @@ task dev: [:check_deps] do
   puts
   system('nodemon main.rb --development')
 end
+
+desc 'start server in development mode (with nodemon, without dev logging)'
+task dev_silent: [:check_deps] do
+  puts
+  puts 'starting server in development mode...'
+  puts
+  system('nodemon main.rb --development --silent')
+end
