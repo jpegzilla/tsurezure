@@ -2,13 +2,23 @@
 
 require_relative 'lib/tsurezure'
 
-$PROCESS_MODE = nil
+server = Tsurezure.new(8888)
 
-ARGV.each do |arg|
-  $PROCESS_MODE = 'development' if arg == '--development'
-  $PROCESS_MODE = 'production' if arg == '--production'
+get_root = proc do |_req = nil, _res = nil|
+  'hello world'
 end
 
-server = Tsurezure::HTTPServer.new(8888)
+get_hello = proc do |_req = nil, _res = nil|
+  'hello world'
+end
+
+# current registration options:
+# imply_get for non-strict request methods,
+# meaning that if you register an endpoint with x method,
+# and someone accesses it by y method, you can allow that
+# 'invalid' request to be treated as a get request
+
+server.register 'get', '/', get_root
+server.register 'get', '/hello', get_hello
 
 server.listen
