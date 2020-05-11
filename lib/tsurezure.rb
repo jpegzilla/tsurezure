@@ -43,8 +43,8 @@ class Tsurezure
 
     ##
     # handles an incoming request from the open socket in +@session+.
-    # constructs a formatted request object from the original request object, then
-    # calls +send_final_response+ in order to send a response.
+    # constructs a formatted request object from the original request object,
+    # and calls +send_final_response+ in order to send a response.
     def handle_request(request)
       url_main = request[:url].split('?')[0]
 
@@ -69,7 +69,8 @@ class Tsurezure
     end
 
     # main process, allows server to handle requests
-    def process(client)
+    def process(client, endpoints)
+      @endpoints = endpoints
       @request = client.gets
       # wait until server isn't recieving anything
       return if @session.gets.nil?
@@ -99,7 +100,7 @@ class Tsurezure
     # create a new thread for handle each incoming request
     loop do
       Thread.start(@server.accept) do |client|
-        RequestHandler.new(client).process client
+        RequestHandler.new(client).process client, @endpoints
       end
     end
   end
@@ -145,12 +146,13 @@ class Tsurezure
   end
 
   def register(http_method, path, responder, options = nil)
-    insurance = ensure_registration http_method.upcase, path, responder, options
+    http_method = http_method.upcase
+    insurance = ensure_registration http_method, path, responder, options
 
     raise ArgumentError, insurance if insurance.class == String
 
     # register a new endpoint
-    @endpoints[http_method] = [] unless @endpoints.key? http_method
+    @endpoints[http_method] = {} unless @endpoints.key? http_method
 
     new_endpoint = { path: path, responder: responder, options: options }
 
@@ -158,13 +160,13 @@ class Tsurezure
   end
 
   def add_new_endpoint(endpoint, method)
-    @endpoints[method].each do |item|
-      if item[:path] == endpoint[:path]
+    @endpoints[method].each do |_, value|
+      if value[:path] == endpoint[:path]
         raise ArgumentError, 'cannot register duplicate path.'
       end
     end
 
-    @endpoints[method] << endpoint
+    @endpoints[method][endpoint[:path]] = endpoint
   end
 
   def kill
