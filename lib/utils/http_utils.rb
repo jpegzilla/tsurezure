@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'logger'
+require_relative 'logbook'
 
 # all utilities for dealing with http-related things
 module HTTPUtils
