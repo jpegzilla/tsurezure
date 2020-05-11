@@ -27,7 +27,7 @@ module TResponse
 
     def self.ensure_response(request, endpoints)
       return false if request.nil? || request.empty?
-      return false if endpoints.empty?
+      return false if endpoints.nil? || endpoints.empty?
 
       true
     end
