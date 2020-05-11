@@ -5,3 +5,4 @@ AllCops:
 GlobalVars:
   AllowedVariables:
     - $PROCESS_MODE
+    - $LOG
