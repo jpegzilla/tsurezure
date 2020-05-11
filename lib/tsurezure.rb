@@ -9,6 +9,15 @@ require_relative 'utils/object_utils'
 require_relative 'utils/error_codes'
 require_relative 'utils/response'
 
+$PROCESS_MODE = nil
+$LOG = true
+
+ARGV.each do |arg|
+  $PROCESS_MODE = 'development' if arg == '--development'
+  $PROCESS_MODE = 'production' if arg == '--production'
+  LOG = false if arg == '--silent'
+end
+
 $PROCESS_MODE = 'production' if $PROCESS_MODE.nil?
 
 # for initializing a simple http server.
