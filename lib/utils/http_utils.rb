@@ -44,7 +44,7 @@ module HTTPUtils
 
       return if data.empty?
 
-      Logbook::Dev.log_json(JSON.parse(data), true, 'body data')
+      # Logbook::Dev.log_json(JSON.parse(data), true, 'body data')
 
       data
     end
@@ -79,18 +79,19 @@ module HTTPUtils
       @length = length
     end
 
-    def respond(status, response, options, content_type)
-      @content_type = content_type
+    def respond(response,
+                options = nil,
+                status = 200,
+                content_type = 'application/json')
+      @content_type = options[:content_type] || content_type
 
       if respond_to? "r_#{status}"
-        method("r_#{status}").call if options.nil?
-        method("r_#{status}").call options unless options.nil?
+        method("r_#{status}").call if options[:method].nil?
+        method("r_#{status}").call options unless options[:method].nil?
       else
         r_400
       end
 
-      # write a blank line so that the browser
-      # knows that the next line is the response
       @session.puts
       @session.puts response
       @session.close
@@ -108,8 +109,14 @@ module HTTPUtils
       @session.puts "Content-Length: #{@length}"
     end
 
+    def r_404
+      @session.puts 'HTTP/1.1 404 Not Found'
+      @session.puts "Content-Type: #{@content_type}"
+      @session.puts "Content-Length: #{@length}"
+    end
+
     def r_405(options)
-      @session.puts 'HTTP/1.1 400 Bad Request'
+      @session.puts 'HTTP/1.1 405 Method Not Allowed'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
       @session.puts "Allow: #{options['allowed']}"
