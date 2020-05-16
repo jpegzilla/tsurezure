@@ -46,4 +46,18 @@ module OUtil
 
     raise ErrorMessage.invalid_structure_error(method, "(#{keys.join(', ')})")
   end
+
+  def self.check_against_array(keys, valid_keys, method)
+    inv_keys = []
+
+    keys.each do |key|
+      key = key.to_s
+
+      inv_keys << key unless valid_keys.include? key
+    end
+
+    return true if inv_keys.length.zero?
+
+    raise ErrorMessage.invalid_structure_error(method, "(#{keys.join(', ')})")
+  end
 end
