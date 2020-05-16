@@ -61,11 +61,24 @@ class Tsurezure
     end
 
     def generate_response(request_object)
-      response = TResponse.get_response request_object, @endpoints
+      type = 'text/plain'
+
+      unless request_object[:options].nil? || request_object[:options].empty?
+        type = request_object[:options][:content_type]
+      end
+
+      res = TResponse.get_response request_object, @endpoints
 
       # Logbook::Dev.log response, true, 'response from TResponse'
 
-      # responder = HTTPUtils::ServerResponse(@session, response[:length])
+      # to initialize: session and length of response
+      responder = HTTPUtils::ServerResponse.new(
+        @session,
+        res[:message].bytesize
+      )
+
+      # to send: response, options, status, content_type
+      responder.respond res[:message], res[:options], res[:status], type
     end
 
     # main process, allows server to handle requests
@@ -110,7 +123,7 @@ class Tsurezure
     # pp verification
     return verification unless verification
 
-    verification
+    verification # to register
   end
 
   def validate_registration_params(method, path, responder)
@@ -136,13 +149,13 @@ class Tsurezure
     return true if options.nil? || options.empty?
     return 'invalid options type.' unless options.class == Hash
 
-    valid_opts = %w[imply_get]
+    valid_opts = %w[content_type]
 
-    opts_valid = OUtil.check_object_keys(options.keys, valid_opts, 'register')
+    opts_valid = OUtil.check_against_array(options.keys, valid_opts, 'register')
 
     return 'invalid options provided to register.' unless opts_valid
 
-    true
+    true # to ensure_registration
   end
 
   def register(http_method, path, responder, options = nil)
@@ -166,8 +179,13 @@ class Tsurezure
       end
     end
 
+    # add endpoint to list of registered endpoints
     @endpoints[method][endpoint[:path]] = endpoint
   end
+
+  # def middleware(path_regex, options, callback)
+  #
+  # end
 
   def kill
     abort
