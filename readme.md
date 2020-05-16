@@ -4,7 +4,7 @@ this is a simple web server framework written in ruby. mainly made as a way for 
 
 the name comes from yukueshirezutsurezure, one of my favorite bands.
 
-its 'tsɯ-ɾe-dzɯ-ɾe.'
+it's 'tsɯ-ɾe-dzɯ-ɾe.'
 
 ## usage
 
@@ -16,7 +16,7 @@ requires:
 
 from the project directory, just run `rake start` to start in production mode, or `rake dev` to run in development mode, which adds some log output and hot reloading with nodemon. gem dependencies will install automatically.
 
-\# todo
+# todo
 
 make it so registered uris can only be accessed with the specified method, and everything else returns a 405
 
