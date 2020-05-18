@@ -19,6 +19,8 @@ after cloning this repo, from the root project directory, just run `rake start` 
 
 ### actually using tsurezure:
 
+first, build the gem: `gem build tsurezure.gemspec`. then, install using `gem install tsurezure-version-number`. `version-number` is whatever version is installed based on the `.gemspec` file.
+
 as for how to use tsurezure, here's a simple hello world to get started:
 
 ```ruby
