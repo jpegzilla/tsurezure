@@ -16,7 +16,7 @@ $LOG = true
 ARGV.each do |arg|
   $PROCESS_MODE = 'development' if arg == '--development'
   $PROCESS_MODE = 'production' if arg == '--production'
-  LOG = false if arg == '--silent'
+  $LOG = false if arg == '--silent'
 end
 
 $PROCESS_MODE = 'production' if $PROCESS_MODE.nil?
