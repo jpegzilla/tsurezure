@@ -4,5 +4,5 @@ AllCops:
 
 GlobalVars:
   AllowedVariables:
-    - $PROCESS_MODE
-    - $LOG
+    - $TRZR_PROCESS_MODE
+    - $TRZR_LOG

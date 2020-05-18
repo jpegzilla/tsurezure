@@ -10,16 +10,16 @@ require_relative 'utils/object_utils' # various object  validation utilities
 require_relative 'utils/error_codes' # for generating errors.
 require_relative 'utils/response' # handles request and generates responses.
 
-$PROCESS_MODE = nil
-$LOG = true
+$TRZR_PROCESS_MODE = nil
+$TRZR_LOG = true
 
 ARGV.each do |arg|
-  $PROCESS_MODE = 'development' if arg == '--development'
-  $PROCESS_MODE = 'production' if arg == '--production'
-  $LOG = false if arg == '--silent'
+  $TRZR_PROCESS_MODE = 'development' if arg == '--development'
+  $TRZR_PROCESS_MODE = 'production' if arg == '--production'
+  $TRZR_LOG = false if arg == '--silent'
 end
 
-$PROCESS_MODE = 'production' if $PROCESS_MODE.nil?
+$TRZR_PROCESS_MODE = 'production' if $TRZR_PROCESS_MODE.nil?
 
 # for initializing a simple http server.
 class Tsurezure

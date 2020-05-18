@@ -5,7 +5,7 @@ module Logbook
   # dev mode logging
   class Dev
     def self.log_json(data, break_around = true, tag = 'info')
-      return unless $PROCESS_MODE == 'development' && $LOG == true
+      return unless $TRZR_PROCESS_MODE == 'development' && $TRZR_LOG == true
 
       if break_around
         puts "\r\n#{tag} - #{caller.first}".black.bg_green
@@ -18,7 +18,7 @@ module Logbook
     end
 
     def self.log(data, break_around = true, tag = 'info')
-      return unless $PROCESS_MODE == 'development' && $LOG == true
+      return unless $TRZR_PROCESS_MODE == 'development' && $TRZR_LOG == true
 
       if break_around
         puts "\r\n#{tag} - #{caller.first}".black.bg_green
