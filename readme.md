@@ -47,20 +47,6 @@ the registration function for creating endpoints is very simple:
 def register(http_method, path, responder, options = nil)
 ```
 
-example based on the hello world file above:
-
-```ruby
-server.register 'get', # http_method
-
-'/', # path
-
-proc { |req|
-  { status: 200, message: 'hello world' }
-}, # responder
-
-content_type: 'text/plain' # options
-```
-
 `http_method` is the method to access the endpoint with. `path` is just the url.
 
 `responder` is a proc that contains the logic used to send a response. it will recieve one argument: the request that was sent to that endpoint. whatever is returned from the proc will be sent as the response from that endpoint.
