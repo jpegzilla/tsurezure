@@ -39,6 +39,8 @@ server.register 'get', '/', proc { |req|
 server.listen
 ```
 
+after you run this file, open up your browser or whatever and go to `localhost:8888`. you should see a page with just the words "hello world".
+
 the registration function for creating endpoints is very simple:
 
 ```ruby
