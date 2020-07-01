@@ -23,6 +23,39 @@ module HTTPUtils
 
       url_params
     end
+
+    def self.get_match_indices(url, regex)
+      matches = url.scan %r{((?<=\/):[^\/]+)}
+      newstring = url.dup.gsub(%r{((?<=\/):[^\/]+)}, ':')
+
+      res = []
+      hash_with_variables = {}
+
+      return if matches.empty? || url == '*'
+
+      newstring.scan(matches[0][0][0]) do |chr|
+        res << [chr, $LAST_MATCH_INFO.offset(0)[0]][1]
+      end
+
+      matches.each_with_index do |itm, idx|
+        hash_with_variables[itm[0].gsub(':', '')] = regex[res[idx]]
+      end
+
+      hash_with_variables
+    end
+
+    def self.matches_url_regex(url, regex)
+      matches = url.scan %r{((?<=\/):[^\/]+)}
+      newregexp = url.dup
+
+      return url.match? Regexp.new("^#{regex}$") if matches.empty?
+
+      matches.each do |mat|
+        newregexp.gsub!(Regexp.new(mat[0].to_s), '.+')
+      end
+
+      url.match? Regexp.new(newregexp)
+    end
   end
 
   # for dealing with header data.
@@ -43,8 +76,6 @@ module HTTPUtils
       data = client.read headers['Content-Length'].to_i
 
       return if data.empty?
-
-      # Logbook::Dev.log_json(JSON.parse(data), true, 'body data')
 
       data
     end
@@ -80,7 +111,7 @@ module HTTPUtils
     end
 
     def respond(response,
-                options = nil,
+                options = {},
                 status = 200,
                 content_type = 'application/json')
       @content_type = options[:content_type] || content_type
