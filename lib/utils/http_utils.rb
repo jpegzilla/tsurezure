@@ -17,7 +17,7 @@ module HTTPUtils
 
           break if value.nil?
 
-          { key: key, value: value }
+          Hash[key, value]
         end
       end
 
