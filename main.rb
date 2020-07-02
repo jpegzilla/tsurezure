@@ -10,39 +10,40 @@ server = Tsurezure.new 8888
 #   # puts req
 # }, {}
 
-server.add_middleware '*', proc { |req|
-  puts
-  puts 'this affects ALL middleware. request:'
-  puts req
+server.add_middleware '*', lambda { |req|
+  # puts
+  # puts 'this affects ALL middleware. request:'
+  # puts req
 }, {}
 
-server.add_middleware '/', proc { |req|
+server.add_middleware '/', lambda { |req|
   puts
   pp 'hello from middleware one! request:'
   puts req
 }, {}
 
-server.add_middleware '/user/:id/articles/:num', proc { |req|
-  puts
-  pp 'hello from the ARTICLE MIDDLEWARE!'
-  puts req
+server.add_middleware '/user/:id/articles/:num', lambda { |req|
+  # puts
+  # pp 'hello from the ARTICLE MIDDLEWARE!'
+  # puts req
 }, {}
 
-server.add_middleware '/e', proc { |req|
-  puts
-  pp 'this middleware will affect MIDDLEWARE E'
-  puts req
+server.add_middleware '/e', lambda { |req|
+  # puts
+  # pp 'this middleware will affect MIDDLEWARE E'
+  # puts req
 }, {}
 
-server.register 'get', '/', proc { |_req = nil|
+server.register 'get', '/', lambda { |_req = nil|
   { status: 200, message: { hello: 'world' }.to_json }
 }, content_type: 'application/json'
 
-server.register 'get', '/hello', proc { |_req = nil|
+server.register 'get', '/hello', lambda { |req|
+  pp req
   { status: 404, message: 'hello stinky' }
 }, content_type: 'text/plain'
 
-server.register 'get', '/e', proc { |_req = nil|
+server.register 'get', '/e', lambda { |_req = nil|
   { status: 404, message: { hello: 'e' }.to_json }
 }, content_type: 'application/json'
 

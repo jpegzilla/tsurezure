@@ -24,21 +24,17 @@ module HTTPUtils
       url_params
     end
 
-    def self.get_match_indices(url, regex)
-      matches = url.scan %r{((?<=\/):[^\/]+)}
-      newstring = url.dup.gsub(%r{((?<=\/):[^\/]+)}, ':')
+    def self.get_match_indices(url, path)
+      split_url = url.split '/'
+      split_path = path.split '/'
 
-      res = []
       hash_with_variables = {}
 
-      return if matches.empty? || url == '*'
+      return if split_url.empty?
 
-      newstring.scan(matches[0][0][0]) do |chr|
-        res << [chr, $LAST_MATCH_INFO.offset(0)[0]][1]
-      end
-
-      matches.each_with_index do |itm, idx|
-        hash_with_variables[itm[0].gsub(':', '')] = regex[res[idx]]
+      split_url.each_with_index do |pname, idx|
+        part = pname.sub(':', '')
+        hash_with_variables[part] = split_path[idx] if pname[0] == ':'
       end
 
       hash_with_variables
