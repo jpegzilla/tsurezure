@@ -92,7 +92,7 @@ register http_method, path, callback, options
 
 `options` is a hash containing various options to somehow modify the response. valid options:
 
--   `content_type` - determines the mime type of the response
+-   `content_type (default: text/plain)` - determines the mime type of the response
 -   `location` - if a location header is required (301, etc), this is used to provide it.
 -   `method` - if an allow header is required (405), this is used to provide it.
 
