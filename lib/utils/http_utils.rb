@@ -149,6 +149,25 @@ module HTTPUtils
       @session.puts "Content-Length: #{@length}"
     end
 
+    def r_201
+      @session.puts 'HTTP/1.1 201 Created'
+      @session.puts "Content-Type: #{@content_type}"
+      @session.puts "Content-Length: #{@length}"
+    end
+
+    def r_301(options)
+      @session.puts 'HTTP/1.1 301 Moved Permanently'
+      @session.puts "Content-Type: #{@content_type}"
+      @session.puts "Content-Length: #{@length}"
+      @session.puts "Location: #{options[:location]}"
+    end
+
+    def r_304
+      @session.puts 'HTTP/1.1 304 Not Modified'
+      @session.puts "Content-Type: #{@content_type}"
+      @session.puts "Content-Length: #{@length}"
+    end
+
     def r_400
       @session.puts 'HTTP/1.1 400 Bad Request'
       @session.puts "Content-Type: #{@content_type}"
@@ -165,7 +184,7 @@ module HTTPUtils
       @session.puts 'HTTP/1.1 405 Method Not Allowed'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
-      @session.puts "Allow: #{options['allowed']}"
+      @session.puts "Allow: #{options[:method]}"
     end
 
     def r_500
