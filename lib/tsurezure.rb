@@ -233,7 +233,7 @@ class Tsurezure
     return true if options.nil? || options.empty?
     return 'invalid options type.' unless options.class == Hash
 
-    valid_opts = %w[content_type]
+    valid_opts = %w[content_type method location]
 
     opts_valid = OUtil.check_against_array(options.keys, valid_opts, 'register')
 
