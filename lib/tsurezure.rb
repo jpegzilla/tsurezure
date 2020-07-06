@@ -85,7 +85,8 @@ class Tsurezure
 
     def get_correct_middleware(request_object)
       @middleware.keys.select do |pat|
-        HTTPUtils::URLUtils.matches_url_regex(pat, request_object[:url])
+        HTTPUtils::URLUtils.matches_url_regex(pat, request_object[:url]) ||
+          pat == '*'
       end
     end
 
