@@ -8,20 +8,29 @@ module HTTPUtils
   # class URLUtils - for dealing with urls
   class URLUtils
     def self.extract_url_params(url)
-      url_params = []
+      url_params = {}
 
-      if url.split('?')[1]
-
-        url_params = url.split('?')[1].split('&').map do |e|
+      if url.split('?')
+            .length > 1
+        url.split('?')[1].split('&').map do |e|
           key, value = e.split('=')
 
           break if value.nil?
 
-          Hash[key, value]
+          url_params[key] = value
         end
       end
 
       url_params
+    end
+
+    def self.url_path_matches?(url, path)
+      split_url = url.split '/'
+      split_path = path.split '/'
+
+      return false if split_url.empty? || split_url.length != split_path.length
+
+      true
     end
 
     def self.get_match_indices(url, path)
@@ -30,7 +39,7 @@ module HTTPUtils
 
       hash_with_variables = {}
 
-      return if split_url.empty?
+      return unless url_path_matches? url, path
 
       split_url.each_with_index do |pname, idx|
         part = pname.sub(':', '')
