@@ -117,6 +117,14 @@ module HTTPUtils
       @length = length
     end
 
+    def valid_options?(options)
+      acceptable_keys = %i[location method]
+
+      return true if acceptable_keys.any? { |key| options.key? key }
+
+      false
+    end
+
     def respond(response,
                 options = {},
                 status = 200,
@@ -124,8 +132,8 @@ module HTTPUtils
       @content_type = options[:content_type] || content_type
 
       if respond_to? "r_#{status}"
-        method("r_#{status}").call if options[:method].nil?
-        method("r_#{status}").call options unless options[:method].nil?
+        method("r_#{status}").call unless valid_options? options
+        method("r_#{status}").call options if valid_options? options
       else
         r_400
       end
