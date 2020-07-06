@@ -154,6 +154,35 @@ class Tsurezure
 
   attr_reader :endpoints # access endpoints object from outside scope
 
+  def add_middleware(path, callback, options)
+    unless path.is_a? String
+      raise ArgumentError, 'first argument to middleware\
+      must be string or function.'
+    end
+
+    middleware_object = {
+      options: options, callback: callback, path_regex: path
+    }
+
+    @middleware[path] << middleware_object if @middleware[path]
+
+    @middleware[path] = [middleware_object] unless @middleware[path]
+  end
+
+  def register(http_method, path, callback, options = nil)
+    http_method = http_method.upcase
+    insurance = ensure_registration http_method, path, callback, options
+
+    raise ArgumentError, insurance if insurance.class == String
+
+    # register a new endpoint but do not register dupes
+    @endpoints[http_method] = {} unless @endpoints.key? http_method
+
+    new_endpoint = { path: path, responder: callback, options: options }
+
+    add_new_endpoint new_endpoint, http_method
+  end
+
   ##
   # run when the server is prepared to accept requests.
   def listen
@@ -165,6 +194,8 @@ class Tsurezure
       end
     end
   end
+
+  private
 
   # ----------------------------------------
   # :section: registration of endpoints and
@@ -211,20 +242,6 @@ class Tsurezure
     true # to ensure_registration
   end
 
-  def register(http_method, path, responder, options = nil)
-    http_method = http_method.upcase
-    insurance = ensure_registration http_method, path, responder, options
-
-    raise ArgumentError, insurance if insurance.class == String
-
-    # register a new endpoint but do not register dupes
-    @endpoints[http_method] = {} unless @endpoints.key? http_method
-
-    new_endpoint = { path: path, responder: responder, options: options }
-
-    add_new_endpoint new_endpoint, http_method
-  end
-
   def add_new_endpoint(endpoint, method)
     @endpoints[method].each do |_, value|
       if value[:path] == endpoint[:path]
@@ -234,26 +251,6 @@ class Tsurezure
 
     # add endpoint to list of registered endpoints
     @endpoints[method][endpoint[:path]] = endpoint
-  end
-
-  # ----------------------------------------
-  # :section: middleware management methods
-  # all middleware management methods follow.
-  # ----------------------------------------
-
-  def add_middleware(path_regex, callback, options)
-    unless path_regex.is_a? String
-      raise ArgumentError, 'first argument to middleware\
-      must be string or function.'
-    end
-
-    middleware_object = {
-      options: options, callback: callback, path_regex: path_regex
-    }
-
-    @middleware[path_regex] << middleware_object if @middleware[path_regex]
-
-    @middleware[path_regex] = [middleware_object] unless @middleware[path_regex]
   end
 
   def kill
