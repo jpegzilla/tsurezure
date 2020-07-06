@@ -50,6 +50,8 @@ module HTTPUtils
     end
 
     def self.matches_url_regex(url, regex)
+      return unless url_path_matches? url, regex
+
       matches = url.scan %r{((?<=\/):[^\/]+)}
       newregexp = url.dup
 
