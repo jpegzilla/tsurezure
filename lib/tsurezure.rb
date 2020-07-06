@@ -97,27 +97,46 @@ class Tsurezure
           request[:url]
         ) || {}
 
+      request[:options] = mid[:options]
+
       request
     end
 
-    def call_each_middleware(request, middleware)
+    def send_middleware_response(req, resp, type)
+      res = resp.merge req
+
+      responder = HTTPUtils::ServerResponse.new(
+        @session,
+        res[:message].bytesize
+      )
+
+      # pp res
+
+      responder.respond res[:message], res[:options] || {}, res[:status], type
+    end
+
+    def call_each_middleware(request, middleware, type)
+      alt = nil
+
       middleware.each do |path|
-        break if path == '*'
+        break if alt
 
         @middleware[path]&.each do |mid|
-          mid[:callback].call fix_req(request, mid)
+          alt = mid[:callback].call fix_req(request, mid)
         end
       end
+
+      return true unless alt
+
+      send_middleware_response(request, alt, type)
     end
 
     def go_through_middleware(request_object, responder, res, type)
       exp = get_correct_middleware request_object
 
-      call_each_middleware request_object, exp
+      done = call_each_middleware request_object, exp, type
 
-      @middleware['*']&.each do |mid|
-        mid[:callback].call fix_req(request_object, mid)
-      end
+      return unless done
 
       # to send: response, options, status, content_type
       responder.respond res[:message], res[:options] || {}, res[:status], type
