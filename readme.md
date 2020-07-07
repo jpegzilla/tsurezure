@@ -23,6 +23,14 @@ after cloning this repo, from the root project directory, just run `rake start` 
 
 to build the gem: run `gem build tsurezure.gemspec`. then, install using `gem install tsurezure-version-number`. `version-number` is whatever version is installed based on the `.gemspec` file.
 
+### commands
+
+-   `rake install` will install dependencies
+-   `rake check_deps` will install dependencies if not installed
+-   `rake start` will run the server in production mode
+-   `rake dev` will run the server in development mode
+-   `rake dev_silent` will run the server in development mode with no logs
+
 ### actually using tsurezure:
 
 as for how to use tsurezure, here's a simple script to get started:
@@ -75,6 +83,24 @@ after you run this file, open up your browser or whatever and go to `http://loca
 ```json
 {
     "message": "hey user #1! you're the first one here!"
+}
+```
+
+the `listen` method can be called with no arguments to just start the server. you can also pass in a lambda or proc that will run when the server has started. the only argument that will be passed to that proc is a hash called `server_opts`. it contains some information about the current configuration:
+
+```ruby
+{
+  port, # port that tsurezure is running on
+  endpoints, # endpoints object containing the endpoints you've added
+  middleware # middleware object containing the middleware you've added
+}
+```
+
+simple example of usage:
+
+```ruby
+server.listen lambda { |opts|
+  puts "listening on port #{opts[:port]}!"
 }
 ```
 

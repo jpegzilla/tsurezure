@@ -60,4 +60,6 @@ server.register 'get', '/user/:id', lambda { |req|
     "hello user ##{url_vars['id']}!" }.to_json }
 }, content_type: 'application/json'
 
-server.listen
+server.listen lambda { |opts|
+  puts "listening on port #{opts[:port]}!"
+}
