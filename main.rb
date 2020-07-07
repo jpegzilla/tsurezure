@@ -52,22 +52,6 @@ server.register 'get', '/', lambda { |_req|
   { status: 200, message: { hello: 'world' }.to_json }
 }, content_type: 'application/json'
 
-server.register 'get', '/hello', lambda { |_req|
-  { status: 404, message: 'hello stinky' }
-}, content_type: 'text/plain'
-
-server.register 'get', '/e', lambda { |_req = nil|
-  { status: 404, message: { hello: 'e' }.to_json }
-}, content_type: 'application/json'
-
-server.register 'get', '/user/:id/articles/:num', lambda { |req|
-  url_vars = req[:vars]
-  params = req[:params]
-
-  { status: 200, message: { message:
-    "hello user ##{url_vars['id']}, your article is ##{url_vars['num']}! you #{params['girl'] == 'true' ? 'are' : 'are not'} a girl." }.to_json }
-}, content_type: 'application/json'
-
 server.register 'get', '/user/:id', lambda { |req|
   url_vars = req[:vars] # { "id" => "1" }
   params = req[:params] # {}
