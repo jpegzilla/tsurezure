@@ -12,6 +12,7 @@ require_relative 'utils/response' # handles request and generates responses.
 
 $TRZR_PROCESS_MODE = nil
 $TRZR_LOG = true
+TRZR_STARTED_AT = Time.now.to_i
 
 ARGV.each do |arg|
   $TRZR_PROCESS_MODE = 'development' if arg == '--development'
@@ -272,10 +273,14 @@ class Tsurezure
     # add endpoint to list of registered endpoints
     @endpoints[method][endpoint[:path]] = endpoint
   end
-
-  def kill
-    abort
-  end
 end
 
-at_exit { puts 'shutting down. goodbye...' }
+at_exit do
+  if $TRZR_PROCESS_MODE == 'development' && $TRZR_LOG.true?
+    time = Time.now.to_i - TRZR_STARTED_AT
+    puts
+    puts '[trzr_dev] shutting down. goodbye...'
+    puts "[trzr_dev] shut down after #{Time.at(time).utc.strftime('%H:%M:%S')}."
+    puts
+  end
+end
