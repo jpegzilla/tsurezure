@@ -222,6 +222,10 @@ class Tsurezure
     end
   end
 
+  def kill
+    abort
+  end
+
   private
 
   def server_opts
