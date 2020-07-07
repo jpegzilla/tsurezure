@@ -206,8 +206,14 @@ class Tsurezure
 
   ##
   # run when the server is prepared to accept requests.
-  def listen
-    puts "running on port #{@port}!"
+  def listen(callback = nil)
+    if $TRZR_PROCESS_MODE == 'development'
+      puts "[trzr_dev] running on port #{@port}!"
+    end
+
+    # call the callback if there's one provided
+    callback.call server_opts if callback.is_a? Proc
+
     # create a new thread for handle each incoming request
     loop do
       Thread.start(@server.accept) do |client|
@@ -217,6 +223,14 @@ class Tsurezure
   end
 
   private
+
+  def server_opts
+    {
+      port: @port,
+      endpoints: @endpoints,
+      middleware: @middleware
+    }
+  end
 
   # ----------------------------------------
   # :section: registration of endpoints and
