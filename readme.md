@@ -25,7 +25,7 @@ to build the gem: run `gem build tsurezure.gemspec`. then, install using `gem in
 
 ### actually using tsurezure:
 
-as for how to use tsurezure, here's a simple hello world to get started:
+as for how to use tsurezure, here's a simple script to get started:
 
 ```ruby
 require 'tsurezure'
