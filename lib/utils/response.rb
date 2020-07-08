@@ -2,6 +2,19 @@
 
 require_relative './http_utils' # mainly used to create http responses.
 
+VALID_METHODS = %w[
+  CONNECT COPY DELETE GET HEAD
+  LINK LOCK MKCOL MOVE OPTIONS
+  PATCH POST PROPFIND PROPPATCH
+  PURGE PUT TRACE UNLINK UNLOCK
+  VIEW
+].freeze
+
+CHECK_METHOD_WARNING = "not found. \
+please ensure you're using the right method!"
+
+INVALID_METHOD_WARNING = 'an invalid method was used!'
+
 ##
 # module for handling all incoming requests to the server
 # stands for TsurezureResponse
@@ -9,36 +22,24 @@ module TResponse
   include HTTPUtils
   # anything that will be needed to create responses
   class Utils
-    def initialize
-      @valid_methods = %w[
-        CONNECT COPY DELETE GET HEAD
-        LINK LOCK MKCOL MOVE OPTIONS
-        OPTIONS PATCH POST PROPFIND
-        PROPPATCH PURGE PUT TRACE
-        UNLINK UNLOCK VIEW
-      ]
-    end
-
     attr_reader :valid_methods
+
+    def initialize
+      @valid_methods = VALID_METHODS
+    end
 
     def self.validate_request(request_params)
       # make sure the user has provided a valid http
       # method, a valid uri, and a valid response /
       # response type
-      valid_methods = %w[
-        CONNECT COPY DELETE GET HEAD
-        LINK LOCK MKCOL MOVE OPTIONS
-        OPTIONS PATCH POST PROPFIND
-        PROPPATCH PURGE PUT TRACE
-        UNLINK UNLOCK VIEW
-      ]
+      return true if VALID_METHODS.include? request_params[:method]
 
-      return false unless valid_methods.include? request_params[:method]
+      Logbook::Dev.log(INVALID_METHOD_WARNING)
     end
 
     def self.get_correct_endpoint(request_object, endpoints)
       endpoints.keys.select do |pat|
-        HTTPUtils::URLUtils.matches_url_regex(pat, request_object[:url])
+        HTTPUtils::URLUtils.matches_url_regex?(pat, request_object[:url])
       end
     end
 
@@ -61,8 +62,9 @@ module TResponse
     @endpoints = endpoints[request[:method]]
 
     # if no endpoint, respond with root endpoint or 404 middleware
-
     unless Utils.ensure_response(request, @endpoints) == true
+      Logbook::Dev.log(CHECK_METHOD_WARNING)
+
       return { options: { content_type: 'application/json' },
                code: 22, status: 404,
                message: { status: 404, message: 'undefined endpoint' }.to_json }

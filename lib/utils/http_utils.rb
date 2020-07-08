@@ -25,6 +25,8 @@ module HTTPUtils
     end
 
     def self.url_path_matches?(url, path)
+      return true if url == path
+
       split_url = url.split '/'
       split_path = path.split '/'
 
@@ -49,7 +51,7 @@ module HTTPUtils
       hash_with_variables
     end
 
-    def self.matches_url_regex(url, regex)
+    def self.matches_url_regex?(url, regex)
       return unless url_path_matches? url, regex
 
       matches = url.scan %r{((?<=\/):[^\/]+)}
