@@ -30,6 +30,7 @@ to build the gem: run `gem build tsurezure.gemspec`. then, install using `gem in
 -   `rake start` will run the server in production mode
 -   `rake dev` will run the server in development mode
 -   `rake dev_silent` will run the server in development mode with no logs
+-   `rake build` will build a `.gem` file based on `tsurezure.gemspec`
 
 ### actually using tsurezure:
 
