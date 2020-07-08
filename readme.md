@@ -135,6 +135,8 @@ add_middleware path, callback, options
 
 `options` for middleware are the same as the `options` for endpoints.
 
+**anything** returned from a middleware will be interpreted as you trying to send a modified response. and of course, ruby will interpret the last reached statement in a method as an implicit return. to avoid this, if you want to have a middleware that doesn't necessarily send a response, just use a `return` at the end of your method to return `nil`.
+
 * * *
 
 ## todo
