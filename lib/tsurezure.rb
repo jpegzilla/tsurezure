@@ -14,6 +14,9 @@ $TRZR_PROCESS_MODE = nil
 $TRZR_LOG = true
 TRZR_STARTED_AT = Time.now.to_i
 
+INVALID_RESPONSE_FORMAT = "if responding from a middleware, \
+you must return a hash that includes a :message property."
+
 ARGV.each do |arg|
   $TRZR_PROCESS_MODE = 'development' if arg == '--development'
   $TRZR_PROCESS_MODE = 'production' if arg == '--production'
@@ -103,8 +106,23 @@ class Tsurezure
       request
     end
 
+    def respond_with_error(error)
+      Logbook::Dev.log(error)
+
+      message = { error: error }.to_json
+
+      responder = HTTPUtils::ServerResponse.new(
+        @session,
+        message.bytesize
+      )
+
+      responder.respond message, {}, 500, 'application/json'
+    end
+
     def send_middleware_response(req, resp, type)
       res = resp.merge req
+
+      return respond_with_error INVALID_RESPONSE_FORMAT if res[:message].nil?
 
       responder = HTTPUtils::ServerResponse.new(
         @session,
