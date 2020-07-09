@@ -40,9 +40,9 @@ as for how to use tsurezure, here's a simple script to get started:
 require 'tsurezure'
 
 # create an instance of tsurezure
-server = Tsurezure.new(8888)
+server = Tsurezure.new 8888
 
-# url: http://localhost:8888/user/1
+# url: http://localhost:8888
 
 # create an endpoint
 server.register 'get', '/user/:id', lambda { |req|
