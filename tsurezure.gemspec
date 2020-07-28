@@ -11,8 +11,7 @@ Gem::Specification.new do |s|
   s.files       = Dir['{lib}/**/*.rb', 'bin/*', 'LICENSE', '*.md', 'nodemon.json']
   s.homepage    = 'https://github.com/jpegzilla/tsurezure'
   s.license     = 'MIT'
-  s.add_runtime_dependency 'json', '~> 1.8', '>= 1.8.3'
+  s.add_runtime_dependency 'json', '>= 2.3.0'
   s.add_development_dependency 'pry', '~> 0.13.1'
   s.add_development_dependency 'rspec', '~> 3.9'
-  spec.add_dependency 'json', '>= 2.3.0'
 end
