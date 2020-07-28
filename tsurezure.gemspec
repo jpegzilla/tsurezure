@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Gem::Specification.new do |s|
   s.name        = 'tsurezure'
-  s.version     = '0.0.31'
+  s.version     = '0.0.32'
   s.date        = '2020-05-28'
   s.summary     = 'tsurezure is a simple web server framework.'
   s.description = 'a simple ruby web server framework. like a ball of loose yarn...'
@@ -12,4 +14,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'json', '~> 1.8', '>= 1.8.3'
   s.add_development_dependency 'pry', '~> 0.13.1'
   s.add_development_dependency 'rspec', '~> 3.9'
+  spec.add_dependency 'json', '>= 2.3.0'
 end
