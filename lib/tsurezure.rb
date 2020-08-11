@@ -310,7 +310,7 @@ class Tsurezure
 end
 
 at_exit do
-  if $TRZR_PROCESS_MODE == 'development' && $TRZR_LOG.true?
+  if $TRZR_PROCESS_MODE == 'development' && $TRZR_LOG == true
     time = Time.now.to_i - TRZR_STARTED_AT
     puts
     puts '[trzr_dev] shutting down. goodbye...'
