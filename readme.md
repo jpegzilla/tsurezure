@@ -141,6 +141,8 @@ add_middleware path, callback, options
 
 ## todo
 
+-   [ ]  I'm wondering if I should change the implementation of the middleware functionality. currently, the middleware has no idea where the request it's processing is about to go. I'm thinking it may be a good idea to pass in the request's determined `responder` function which is determined before middleware is called (see `tsurezure.rb:135-160`). this will allow users to choose whether to call the final responder function. I don't know if this would be better or just different.
+
 -   [ ]  make it so registered uris can only be accessed with the specified method, and everything else returns a 405 (maybe make this an option??)
 
 -   [ ]  give the user an option to add middleware specifically for catching errors
