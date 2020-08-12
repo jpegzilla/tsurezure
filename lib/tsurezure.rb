@@ -81,7 +81,7 @@ class Tsurezure
       # to initialize: session and length of response
       responder = HTTPUtils::ServerResponse.new(
         @session,
-        res[:message].bytesize
+        res[:message].nil? ? '' : res[:message].bytesize
       )
 
       go_through_middleware request_object, responder, res, type
