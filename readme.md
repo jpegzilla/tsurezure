@@ -87,6 +87,14 @@ after you run this file, open up your browser or whatever and go to `http://loca
 }
 ```
 
+by the way, any url parameters you pass in will be parsed as a hash inside `req[:params]`. so if you make a request like `GET http://localhost:8888/user/1?hello=world`, you'll be able to access those params inside your registration function. example:
+
+```ruby
+server.register 'get', '/user/:id', lambda { |req|
+  params = req[:params] # { 'hello' => 'world' }
+}, content_type: 'application/json'
+```
+
 the `listen` method can be called with no arguments to just start the server. you can also pass in a lambda or proc that will run when the server has started. the only argument that will be passed to that proc is a hash called `server_opts`. it contains some information about the current configuration:
 
 ```ruby
