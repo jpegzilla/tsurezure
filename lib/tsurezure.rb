@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 require 'socket'
@@ -210,7 +209,7 @@ class Tsurezure
     http_method = http_method.upcase
     insurance = ensure_registration http_method, path, callback, options
 
-    raise ArgumentError, insurance if insurance.class == String
+    raise ArgumentError, insurance if insurance.instance_of? String
 
     # register a new endpoint but do not register dupes
     @endpoints[http_method] = {} unless @endpoints.key? http_method
@@ -223,9 +222,7 @@ class Tsurezure
   ##
   # run when the server is prepared to accept requests.
   def listen(callback = nil)
-    if $TRZR_PROCESS_MODE == 'development'
-      puts "[trzr_dev] running on port #{@port}!"
-    end
+    puts "[trzr_dev] running on port #{@port}!" if $TRZR_PROCESS_MODE == 'development'
 
     # call the callback if there's one provided
     callback.call server_opts if callback.is_a? Proc
@@ -266,17 +263,13 @@ class Tsurezure
   end
 
   def validate_registration_params(method, path, responder)
-    unless TResponse::Utils.new.valid_methods.include? method
-      return "#{method} is not a valid http method."
-    end
+    return "#{method} is not a valid http method." unless TResponse::Utils.new.valid_methods.include? method
 
-    return 'invalid path type. must be a string.' unless path.class == String
+    return 'invalid path type. must be a string.' unless path.instance_of?(String)
 
-    if path.empty? || path.chr != '/'
-      return 'invalid path. must begin with "/".'
-    end
+    return 'invalid path. must begin with "/".' if path.empty? || path.chr != '/'
 
-    return 'invalid responder type. must a proc.' unless responder.class == Proc
+    return 'invalid responder type. must a proc.' unless responder.instance_of?(Proc)
 
     true
   end
@@ -286,7 +279,7 @@ class Tsurezure
 
     return valid unless valid == true
     return true if options.nil? || options.empty?
-    return 'invalid options type.' unless options.class == Hash
+    return 'invalid options type.' unless options.instance_of?(Hash)
 
     valid_opts = %w[content_type method location]
 
@@ -299,9 +292,7 @@ class Tsurezure
 
   def add_new_endpoint(endpoint, method)
     @endpoints[method].each do |_, value|
-      if value[:path] == endpoint[:path]
-        raise ArgumentError, 'cannot register duplicate path.'
-      end
+      raise ArgumentError, 'cannot register duplicate path.' if value[:path] == endpoint[:path]
     end
 
     # add endpoint to list of registered endpoints

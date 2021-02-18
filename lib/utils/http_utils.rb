@@ -54,7 +54,7 @@ module HTTPUtils
     def self.matches_url_regex?(url, regex)
       return unless url_path_matches? url, regex
 
-      matches = url.scan %r{((?<=\/):[^\/]+)}
+      matches = url.scan %r{((?<=/):[^/]+)}
       newregexp = url.dup
 
       return url.match? Regexp.new("^#{regex}$") if matches.empty?
@@ -133,11 +133,11 @@ module HTTPUtils
                 content_type = 'application/json')
       @content_type = options[:content_type] || content_type
 
-      if respond_to? "r_#{status}"
-        method("r_#{status}").call unless valid_options? options
-        method("r_#{status}").call options if valid_options? options
+      if respond_to? "r#{status}"
+        method("r#{status}").call unless valid_options? options
+        method("r#{status}").call options if valid_options? options
       else
-        r_400
+        r400
       end
 
       @session.puts
@@ -145,51 +145,51 @@ module HTTPUtils
       @session.close
     end
 
-    def r_200
+    def r200
       @session.puts 'HTTP/1.1 200 OK'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
     end
 
-    def r_201
+    def r201
       @session.puts 'HTTP/1.1 201 Created'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
     end
 
-    def r_301(options)
+    def r301(options)
       @session.puts 'HTTP/1.1 301 Moved Permanently'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
       @session.puts "Location: #{options[:location]}"
     end
 
-    def r_304
+    def r304
       @session.puts 'HTTP/1.1 304 Not Modified'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
     end
 
-    def r_400
+    def r400
       @session.puts 'HTTP/1.1 400 Bad Request'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
     end
 
-    def r_404
+    def r404
       @session.puts 'HTTP/1.1 404 Not Found'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
     end
 
-    def r_405(options)
+    def r405(options)
       @session.puts 'HTTP/1.1 405 Method Not Allowed'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
       @session.puts "Allow: #{options[:method]}"
     end
 
-    def r_500
+    def r500
       @session.puts 'HTTP/1.1 500 Internal Server Error'
       @session.puts "Content-Type: #{@content_type}"
       @session.puts "Content-Length: #{@length}"
