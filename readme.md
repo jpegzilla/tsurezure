@@ -159,4 +159,4 @@ add_middleware path, callback, options
 
 disclaimer: I don't know ruby, and this is my first time using it to make something.
 
-the name comes from yukueshirezutsurezure, one of my favorite bands. it's pronounced 'tsɯ-ɾe-dzɯ-ɾe.'
+the name comes from yukueshirezutsurezure, one of my favorite bands. tsurezure is pronounced 'tsɯ-ɾe-dzɯ-ɾe.'
