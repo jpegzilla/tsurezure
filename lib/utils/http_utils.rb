@@ -24,14 +24,24 @@ module HTTPUtils
       url_params
     end
 
+    # TODO: make this less complicated
+    # hello, eris from [current year]! have you been practicing? good luck!
     def self.url_path_matches?(url, path)
       return true if url == path
 
       split_url = url.split '/'
       split_path = path.split '/'
+      non_var_equality = true
 
-      return false if split_url.empty? || split_url.length != split_path.length
+      return false if split_url.length != split_path.length
 
+      split_path.each_with_index do |p, i|
+        next if split_url[i][0] == ':'
+        non_var_equality = false if p != split_url[i]
+      end
+
+      return false unless non_var_equality == true
+      return false if split_url.empty?
       true
     end
 

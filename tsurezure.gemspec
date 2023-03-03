@@ -2,8 +2,8 @@
 
 Gem::Specification.new do |s|
   s.name        = 'tsurezure'
-  s.version     = '0.0.34'
-  s.date        = '2020-05-28'
+  s.version     = '0.0.36'
+  s.date        = '2023-03-02'
   s.summary     = 'tsurezure is a simple web server framework.'
   s.description = 'a simple ruby web server framework. like a ball of loose yarn...'
   s.authors     = ['jpegzilla']
@@ -12,6 +12,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/jpegzilla/tsurezure'
   s.license     = 'MIT'
   s.add_runtime_dependency 'json', '>= 2.3.0'
-  s.add_development_dependency 'pry', '~> 0.13.1'
-  s.add_development_dependency 'rspec', '~> 3.9'
+  # s.add_development_dependency 'pry', '~> 0.13.1'
+  # s.add_development_dependency 'rspec', '~> 3.9'
 end

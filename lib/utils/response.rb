@@ -85,12 +85,11 @@ module TResponse
 
     response_from_endpoint = endpoint[:responder].call final
 
-    unless response_from_endpoint.is_a? Hash
-      return { status: 200, message: response_from_endpoint }
+    if response_from_endpoint.is_a? Hash
+      response_from_endpoint[:options] = final[:options]
+      return response_from_endpoint
     end
 
-    response_from_endpoint[:options] = final[:options]
-
-    response_from_endpoint
+    { status: 200, message: response_from_endpoint }
   end
 end
