@@ -1,4 +1,4 @@
-# tsurezure
+# tsurezure [![gem version](https://badge.fury.io/rb/tsurezure.svg)](https://badge.fury.io/rb/tsurezure)
 
 this is a simple web server framework written in ruby. mainly made as a way for me to quickly put together rest apis in my favorite language.
 
